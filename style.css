@@ -33,6 +33,7 @@ body {
     justify-content: center;
     margin-top: 4rem;
     margin-bottom: 2rem;
+    margin-left: -16rem;
 }
 
 /* Tools */
@@ -54,6 +55,7 @@ body {
 .styles {
     display: flex;
     flex-direction: column;
+    gap: 0.25rem;
     margin-top: 4.25rem;
 }
 
@@ -146,15 +148,29 @@ input[type="color"]::-webkit-color-swatch {
 
 .btn:hover {
     transform: scale(.95);
-    background-color: #adadb2;
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), #d8d8df;
+    color: #141414;
 }
 
 #colorPicker:hover {
     transform: scale(.95);
-    border: 0.25rem solid #adadb2;
 }
 
 .btn-filter:hover {
+    background: none;
     background-color: rgba(216, 216, 223, 0);
     border: 1px solid #d8d8df;
+}
+
+/* Active Buttons */
+
+.filter-active {
+    background-color: #141414;
+    border: none;
+    color: #f0f0f0;
+}
+
+.btn-active {
+    background-color: #141414;
+    color: #f0f0f0;
 }
