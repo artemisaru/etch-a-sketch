@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Etch-A-Sketch</title>
     <link rel="stylesheet" href="./style.css">
+    <script src="https://kit.fontawesome.com/989b361632.js" crossorigin="anonymous"></script>
 </head>
 <body>
     <!-- Header -->
@@ -13,17 +14,40 @@
         <p class="subtitle">Subtitle</p>
     </div>
     <div class="sketch-area">
-        <!-- Tools -->
-        <div class="tool-stack">
-            <input id="colorPicker" type="color">
-            <button id="gridSize" class="btn">Grid Size</button>
-            <button id="monoColor" class="btn">Single Color</button>
-            <button id="random" class="btn">Random Colors</button>
-            <button id="eraser" class="btn">Eraser</button>
-            <button id="clear" class="btn">Clear</button>
+        <!-- Styles -->
+        <div class="filter">
+            <div class="styles">
+                <p class="filter-title">Choose Style</p>
+                <button id="monoColor" class="btn btn-filter">
+                    <i class="fa-regular fa-square"></i>
+                    Single Color</button>
+                <button id="random" class="btn btn-filter">
+                    <i class="fa-regular fa-square"></i>
+                    Random Colors</button>
+            </div>
         </div>
-        <!-- Sketch Grid -->
-        <div class="container"></div>
+        <div class="container">
+            <!-- Tools -->
+            <div class="tools">
+                <div class="left">
+                    <button id="clear" class="btn">Reset canvas</button>
+                </div>
+                <div class="right">
+                    <button id="pencil" class="btn btn-icon">
+                        <i class="fa-solid fa-pencil"></i>
+                    </button>
+                    <button id="eraser" class="btn btn-icon">
+                        <i class="fa-solid fa-eraser"></i>
+                    </button>
+                    <button id="resize" class="btn btn-icon">
+                        <i class="fa-solid fa-ruler"></i>
+                    </button>
+                    <input id="colorPicker" type="color">
+                </div>
+            </div>
+            <!-- Canvas -->
+            <div class="canvas"></div>
+        </div>
     </div>
 </body>
 </html>
