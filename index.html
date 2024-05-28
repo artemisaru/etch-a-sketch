@@ -11,17 +11,17 @@
     <!-- Header -->
     <div class="header">
         <h1 class="title">Etch-A-Sketch</h1>
-        <p class="subtitle">Subtitle</p>
+        <p class="subtitle">Have fun drawing with your mouse!</p>
     </div>
     <div class="sketch-area">
         <!-- Styles -->
         <div class="filter">
             <div class="styles">
                 <p class="filter-title">Choose Style</p>
-                <button id="monoColor" class="btn btn-filter filter-active">
+                <button id="monoColor" class="btn btn-text_md btn-filter filter-active">
                     <i class="fa-regular fa-square"></i>
                     Single Color</button>
-                <button id="random" class="btn btn-filter">
+                <button id="random" class="btn btn-text_md btn-filter">
                     <i class="fa-regular fa-square"></i>
                     Random Colors</button>
             </div>
@@ -30,7 +30,7 @@
             <!-- Tools -->
             <div class="tools">
                 <div class="left">
-                    <button id="clear" class="btn">Reset canvas</button>
+                    <button id="clear" class="btn btn-text_md">Reset canvas</button>
                 </div>
                 <div class="right">
                     <button id="pencil" class="btn btn-icon btn-active">
@@ -54,18 +54,22 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button id="closeModal" class="btn btn-icon btn-icon_small"><i class="fa-solid fa-xmark"></i></button>
-                <h4>Change Grid Size</h4>
+                <h3>Change Grid Size</h3>
             </div>
             <div class="modal-body">
                 <p>How many squares per side would you like? Enter a number from 16 to 100.</p>
                 <div class="input">
                     <label for="squaresPerSide">Squares per side</label>
                     <input type="number" id="squaresPerSide" name="squaresPerSide" min="16" max="100" value="16">
+                    <div class="input-message">
+                        <i class="fa-solid fa-circle-info"></i>
+                        <p>Help text</p>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn_small">Cancel</i></button>
-                <button class="btn btn_small">Change grid</i></button>
+                <button class="btn btn_md btn-text_md">Cancel</i></button>
+                <button class="btn btn_md btn-text_md btn-modal_primary">Save Change</i></button>
             </div>
         </div>
     </div>
