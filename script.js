@@ -7,7 +7,7 @@ const closeModalBtn = document.querySelector("#closeModal");
 const cancelBtn = document.querySelector("#cancelBtn");
 const saveBtn = document.querySelector("#saveBtn");
 
-// Set Canvas Grid Size
+// Create Canvas Grid
 function createGrid() {
     let inputValue = document.querySelector("#squaresPerSide").value;
     canvasGrid(inputValue);
@@ -15,26 +15,18 @@ function createGrid() {
 
 // Remove Canvas Grid
 function removeGrid() {
-    let leftOvers = canvas.firstChild;
-    while (leftOvers) {
-        canvas.removeChild(leftOvers);
+    while (canvas.firstChild) {
+        canvas.removeChild(canvas.lastChild);
     }
 }
 
-// Create Canvas Grid
+// Generate Grid Squares
 function canvasGrid(squaresPerSide) {
     const width = `calc(var(--canvasWidth) / ${squaresPerSide})`;
     const height = width;
     const squares = Math.pow(squaresPerSide, 2);
     for (let n = 0; n < squares; n++) {
         canvasCell(width, height);
-    }
-}
-
-// Remove Canvas Grid
-function removeGrid() {
-    while (canvas.firstChild) {
-        canvas.removeChild(canvas.lastChild);
     }
 }
 
