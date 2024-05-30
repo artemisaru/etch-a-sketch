@@ -7,6 +7,8 @@ const closeModalBtn = document.querySelector("#closeModal");
 const cancelBtn = document.querySelector("#cancelBtn");
 const saveBtn = document.querySelector("#saveBtn");
 
+const colorPicker = document.querySelector("#colorPicker");
+
 // Create Canvas Grid
 function createGrid() {
     let inputValue = document.querySelector("#squaresPerSide").value;
@@ -40,9 +42,45 @@ function canvasCell(squareWidth, squareHeight) {
 
     // Add different styles
     square.addEventListener("mouseover", () => {
-        square.style.background = "#1a1a1a";
+        for (let a = 10; a <= 100; a++) {
+            let colour = `rgba(0, 0, 0, ${a/100})`;
+            square.style.background = colour;    
+        } 
     })
 }
+
+// Drawing Styles
+
+// Mono Color
+function monoColor() {
+    colorPicker.addEventListener("input", (e) => {
+        let color = e.target.value;
+        return color;
+    })
+}
+
+// Random Color
+function randomColor() {
+    const red = Math.floor(Math.random() * 256);
+    const green = Math.floor(Math.random() * 256);
+    const blue = Math.floor(Math.random() * 256);
+    const random = `rgb(${red}, ${green}, ${blue})`;
+    return random;
+}
+
+// Add Shade
+function addShade() {
+    let shadePercentage = 0;
+    let intValue = 0;
+    let shadeHex = 0;
+    while (shadePercentage < 100) {
+        shadePercentage += 10;
+        intValue = Math.round(shadePercentage / 100 * 255);
+        shadeHex = intValue.toString(16);
+        console.log(shadeHex)
+    }
+}
+addShade();
 
 // Show Modal
 function showModal() {
