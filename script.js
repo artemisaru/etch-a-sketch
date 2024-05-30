@@ -92,6 +92,12 @@ function addShade(transparentBg) {
     }
 }
 
+// Clear Drawing
+function clearDrawing() {
+    removeGrid();
+    createGrid();
+}
+
 // Show Modal
 function showModal() {
     modal.style.display = "block";
@@ -104,6 +110,7 @@ function hideModal() {
 
 // Event Listeners
 window.addEventListener("load", () => {createGrid()});
+clear.addEventListener("click", () => clearDrawing());
 resize.addEventListener("click", () => {showModal()});
 closeModalBtn.addEventListener("click", () => {hideModal()});
 window.addEventListener("click", (event) => {
