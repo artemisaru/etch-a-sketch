@@ -15,38 +15,42 @@
     </div>
     <div class="sketch-area">
         <!-- Styles -->
-        <div class="filter">
+        <div class="col col-left">
             <div class="styles">
                 <p class="filter-title">Choose Style</p>
                 <button id="monoColor" class="btn btn-text_md btn-filter filter-active">
                     <i class="fa-regular fa-square"></i>
-                    Single Color</button>
+                    Single Color
+                </button>
                 <button id="random" class="btn btn-text_md btn-filter">
                     <i class="fa-regular fa-square"></i>
-                    Random Colors</button>
+                    Random Colors
+                </button>
+                <button id="addOpacity" class="btn btn-text_md btn-filter">
+                    <i class="fa-regular fa-square"></i>
+                    Tranparent
+                </button>
             </div>
         </div>
-        <div class="container">
-            <!-- Tools -->
+        <!-- Canvas -->
+        <div class="canvas"></div>
+        <!-- Tools -->
+        <div class="col col-right">
             <div class="tools">
-                <div class="left">
-                    <button id="clear" class="btn btn-text_md">Reset canvas</button>
-                </div>
-                <div class="right">
-                    <button id="pencil" class="btn btn-icon btn-active">
-                        <i class="fa-solid fa-pencil"></i>
-                    </button>
-                    <button id="eraser" class="btn btn-icon">
-                        <i class="fa-solid fa-eraser"></i>
-                    </button>
-                    <button id="resize" class="btn btn-icon">
-                        <i class="fa-solid fa-ruler"></i>
-                    </button>
-                    <input id="colorPicker" type="color">
-                </div>
+                <button id="pencil" class="btn btn-icon btn-active">
+                    <i class="fa-solid fa-pencil"></i>
+                </button>
+                <button id="eraser" class="btn btn-icon">
+                    <i class="fa-solid fa-eraser"></i>
+                </button>
+                <button id="resize" class="btn btn-icon">
+                    <i class="fa-solid fa-ruler"></i>
+                </button>
+                <input id="colorPicker" type="color" >
             </div>
-            <!-- Canvas -->
-            <div class="canvas"></div>
+            <button id="clear" class="btn btn-icon">
+                <i class="fa-solid fa-rotate-left"></i>
+            </button>
         </div>
     </div>
     <!-- Change Size Modal -->
