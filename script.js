@@ -24,6 +24,7 @@ const addOpacity = document.querySelector("#addOpacity");
 
 let sketching = false;
 let erasing = false;
+let monocoloring = false;
 let randomizing = false;
 let darkening = false;
 
@@ -52,6 +53,28 @@ function gridSquares(squaresPerSide) {
     }
 }
 
+// Set Square Background Color
+function paintSquare(e) {
+    if (e.type === "mousedown") {
+        sketching = true;
+        e.target.style.background = pencilColor;
+        if (randomizing) {
+            pencilColor = getRandomColors();
+        } else if (darkening) {
+            createDarkening(e.target);
+        }
+    } else if (e.type === "mouseover" && sketching) {
+        e.target.style.background = pencilColor;
+        if (randomizing) {
+            pencilColor = getRandomColors();
+        } else if (darkening) {
+            createDarkening(e.target);
+        }
+    } else {
+        sketching = false;
+    }
+}
+
 // Create Grid Square
 function createSquare(squareWidth, squareHeight) {
     const square = document.createElement("div");
@@ -60,35 +83,100 @@ function createSquare(squareWidth, squareHeight) {
 
     canvas.appendChild(square);
 
-    // Add different styles
-    square.addEventListener("mouseover", () => {
-        addShade(square);
-    })
+    square.addEventListener("mousedown", (e) => paintSquare(e));
+    square.addEventListener("mouseover", (e) => paintSquare(e));
+    square.addEventListener("mouseup", (e) => paintSquare(e));
 }
 
 // Drawing Styles
 
 // Mono Color
-function singleColor(monoBg) {
-    monoBg.style.background = colorPicker.value;
+function getSingleColor() {
+    pencilColor = colorPicker.value;
 }
 
-// Random Color
-function randomColor(randomBg) {
+// Random Colors
+function getRandomColors() {
     const red = Math.floor(Math.random() * 256);
     const green = Math.floor(Math.random() * 256);
     const blue = Math.floor(Math.random() * 256);
     const random = `rgb(${red}, ${green}, ${blue})`;
-    randomBg.style.background = random;
+    return random;
 }
 
-// Add Shade
-function addShade(transparentBg) {
+// Add Opacity
+function createDarkening(transparentBg) {
     transparentBg.style.background = colorPicker.value;
     let opacity = Number(transparentBg.style.opacity);
     if (opacity < 1) {
         opacity += 0.1;
         transparentBg.style.opacity = opacity;
+    }
+}
+
+// Toggle Buttons
+function toggleSketching() {
+    sketching = !sketching;
+    pencil.classList.toggle("btn-active");
+    pencilColor = sketching ? colorPicker.value : pencilColor;
+    if (sketching) {
+        if (monocoloring) {
+            toggleSinigleColor();
+        } else if (monocoloring && darkening) {
+            toggleSinigleColor();
+            toggleDarkening();
+        } else if (randomizing) {
+            toggleRandomColors();
+        } else if (randomizing && darkening) {
+            toggleRandomColors();
+            toggleDarkening();
+        } else if (darkening) {
+            toggleDarkening();
+        }
+    }
+}
+
+function toggleEraser(eraseBg) {
+    erasing = !erasing;
+    eraser.classList.toggle("btn-active");
+    pencilColor = erasing ? "" : colorPicker.value;
+    //eraseBg.style.background = "";
+    if (erasing) {
+        if (randomizing) {
+            toggleRandomColors();
+        } else if (darkening) {
+            toggleDarkening();
+        } else if (monocoloring) {
+            toggleSinigleColor();
+        }
+    }
+}
+
+// Toggle Styles
+function toggleSinigleColor(s) {
+    monocoloring = !monocoloring;
+    monoColor.classList.toggle("filter-active");
+    pencilColor = !monocoloring ? colorPicker.value : pencilColor;
+    if (monocoloring && erasing) {
+        toggleEraser();
+    }
+}
+
+function toggleRandomColors() {
+    randomizing = !randomizing;
+    randomColors.classList.toggle("filter-active");
+    pencilColor = !randomizing ? colorPicker.value : pencilColor;
+    if (randomizing && erasing) {
+        toggleEraser();
+    }
+}
+
+function toggleDarkening() {
+    darkening = !darkening;
+    addOpacity.classList.toggle("filter-active");
+    pencilColor = !darkening ? colorPicker.value : pencilColor;
+    if (darkening && erasing) {
+        toggleEraser();
     }
 }
 
@@ -110,7 +198,12 @@ function hideModal() {
 
 // Event Listeners
 window.addEventListener("load", () => {createGrid()});
-clear.addEventListener("click", () => clearDrawing());
+clear.addEventListener("click", () => {clearDrawing()});
+pencil.addEventListener("click", () => {toggleSketching()});
+eraser.addEventListener("click", () => {toggleEraser()});
+monoColor.addEventListener("click", () => {toggleSinigleColor()});
+randomColors.addEventListener("click", () => {toggleRandomColors()});
+addOpacity.addEventListener("click", () => {toggleDarkening()});
 resize.addEventListener("click", () => {showModal()});
 closeModalBtn.addEventListener("click", () => {hideModal()});
 window.addEventListener("click", (event) => {

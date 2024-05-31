@@ -105,18 +105,13 @@ body {
 
 /* Canvas */
 .canvas {
+    flex-shrink: 0;
     display: flex;
     flex-wrap: wrap;
     width: 512px;
     --canvasWidth: 512px;
     height: 512px;
     background-color: #f0f0f0;
-}
-
-.canvas-cell {
-    width: calc(var(--canvasWidth) / 16);
-    --cellWidth: calc(var(--canvasWidth) / 16);
-    height: var(--cellWidth);
 }
 
 /* Buttons */
