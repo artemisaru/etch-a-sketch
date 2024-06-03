@@ -270,6 +270,7 @@ input[type="number"] {
 .btn-active {
     background-color: #141414;
     color: #f0f0f0;
+    pointer-events: none;
 }
 
 /* Modal */

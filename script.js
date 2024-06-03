@@ -22,19 +22,12 @@ const monoColor = document.querySelector("#monoColor");
 const randomColors = document.querySelector("#random");
 const addOpacity = document.querySelector("#addOpacity");
 
-let sketching = false;
+let sketch = false;
+let sketching = true;
 let erasing = false;
-let monocoloring = false;
+let monocoloring = true;
 let randomizing = false;
 let darkening = false;
-
-let pencilColor = "#1a1a1a";
-
-// Create Canvas Grid
-function createGrid() {
-    let inputValue = document.querySelector("#squaresPerSide").value;
-    gridSquares(inputValue);
-}
 
 // Remove Canvas Grid
 function removeGrid() {
@@ -43,35 +36,19 @@ function removeGrid() {
     }
 }
 
-// Generate Grid Squares
-function gridSquares(squaresPerSide) {
+// Set Grid Size
+function setGridSize() {
+    let inputValue = document.querySelector("#squaresPerSide").value;
+    createGrid(inputValue);
+}
+
+// Create Grid 
+function createGrid(squaresPerSide) {
     const width = `calc(var(--canvasWidth) / ${squaresPerSide})`;
     const height = width;
     const squares = Math.pow(squaresPerSide, 2);
     for (let n = 0; n < squares; n++) {
         createSquare(width, height);
-    }
-}
-
-// Set Square Background Color
-function paintSquare(e) {
-    if (e.type === "mousedown") {
-        sketching = true;
-        e.target.style.background = pencilColor;
-        if (randomizing) {
-            pencilColor = getRandomColors();
-        } else if (darkening) {
-            createDarkening(e.target);
-        }
-    } else if (e.type === "mouseover" && sketching) {
-        e.target.style.background = pencilColor;
-        if (randomizing) {
-            pencilColor = getRandomColors();
-        } else if (darkening) {
-            createDarkening(e.target);
-        }
-    } else {
-        sketching = false;
     }
 }
 
@@ -83,79 +60,98 @@ function createSquare(squareWidth, squareHeight) {
 
     canvas.appendChild(square);
 
-    square.addEventListener("mousedown", (e) => paintSquare(e));
-    square.addEventListener("mouseover", (e) => paintSquare(e));
-    square.addEventListener("mouseup", (e) => paintSquare(e));
+    //square.addEventListener("mousedown", (e) => paintSquare(e));
+    //square.addEventListener("mouseover", (e) => paintSquare(e));
+    //square.addEventListener("mouseup", (e) => paintSquare(e));
 }
 
+// Set Square Background Color
+function paintSquare(e) {
+    if (e.type === "mousedown") {
+        sketch = true;
+        e.target.style.background = pencilColor;
+        getSquareBackground(e.target);
+    } else if (e.type === "mouseover" && sketch) {
+        e.target.style.background = pencilColor;
+        getSquareBackground(e.target);
+    } else {
+        sketch = false;
+    }
+}
+
+//Get Background Color
+function getSquareBackground(sq) {
+    if (sketching && monocoloring) {
+        pencilColor = getSingleColor();
+    } else if (sketching && randomizing) {
+        pencilColor = getRandomColors();
+    } else if (sketching && darkening) {
+        if (monocoloring) {
+            pencilColor = getSingleColor();
+            createDarkening();
+        } else if (randomizing) {
+            pencilColor = getRandomColors();
+            createDarkening(sq);
+        }
+    }
+}
 // Drawing Styles
 
-// Mono Color
-function getSingleColor() {
-    pencilColor = colorPicker.value;
+// Set Single Color
+function setSingleColor(square) {
+    square.style.background = colorPicker.value;
 }
 
-// Random Colors
-function getRandomColors() {
+// Set Random Colors
+function setRandomColors(square) {
     const red = Math.floor(Math.random() * 256);
     const green = Math.floor(Math.random() * 256);
     const blue = Math.floor(Math.random() * 256);
     const random = `rgb(${red}, ${green}, ${blue})`;
-    return random;
+    square.style.background = random;
 }
 
-// Add Opacity
-function createDarkening(transparentBg) {
-    transparentBg.style.background = colorPicker.value;
+// Add Opacity Effect
+function setDarkeningEffect(square) {
+    let transparentBg = square.style.background;
+    if (monocoloring) {
+        transparentBg = setSingleColor(square);
+    } else if (randomizing) {
+        transparentBg = setRandomColors(square);
+    }
     let opacity = Number(transparentBg.style.opacity);
     if (opacity < 1) {
         opacity += 0.1;
-        transparentBg.style.opacity = opacity;
+        square.style.opacity = opacity;
     }
 }
 
 // Toggle Buttons
 function toggleSketching() {
     sketching = !sketching;
-    pencil.classList.toggle("btn-active");
-    pencilColor = sketching ? colorPicker.value : pencilColor;
-    if (sketching) {
-        if (monocoloring) {
-            toggleSinigleColor();
-        } else if (monocoloring && darkening) {
-            toggleSinigleColor();
-            toggleDarkening();
-        } else if (randomizing) {
-            toggleRandomColors();
-        } else if (randomizing && darkening) {
-            toggleRandomColors();
-            toggleDarkening();
-        } else if (darkening) {
-            toggleDarkening();
-        }
+    sketching ? pencil.classList.add("btn-active") : pencil.classList.remove("btn-active");
+    if (sketching && erasing) {
+        toggleEraser();
     }
+    //if (sketching && monocoloring) {toggleSinigleColor()}
+    //if (sketching && randomizing) {toggleRandomColors()}
+    //if (sketching && darkening) {toggleDarkening()}
+    //if (sketching && erasing) {toggleEraser()}
 }
 
-function toggleEraser(eraseBg) {
+function toggleEraser() {
     erasing = !erasing;
-    eraser.classList.toggle("btn-active");
+    erasing ? eraser.classList.add("btn-active") : eraser.classList.remove("btn-active");
     pencilColor = erasing ? "" : colorPicker.value;
-    //eraseBg.style.background = "";
-    if (erasing) {
-        if (randomizing) {
-            toggleRandomColors();
-        } else if (darkening) {
-            toggleDarkening();
-        } else if (monocoloring) {
-            toggleSinigleColor();
-        }
+    if (erasing && sketching) {
+        toggleSketching();
     }
 }
 
 // Toggle Styles
-function toggleSinigleColor(s) {
+function toggleSinigleColor() {
     monocoloring = !monocoloring;
-    monoColor.classList.toggle("filter-active");
+    monocoloring ? monoColor.classList.add("filter-active") : monoColor.classList.remove("filter-active");
     pencilColor = !monocoloring ? colorPicker.value : pencilColor;
     if (monocoloring && erasing) {
         toggleEraser();
@@ -164,7 +160,7 @@ function toggleSinigleColor(s) {
 
 function toggleRandomColors() {
     randomizing = !randomizing;
-    randomColors.classList.toggle("filter-active");
+    randomizing ? randomColors.classList.add("filter-active") : randomColors.classList.remove("filter-active");
     pencilColor = !randomizing ? colorPicker.value : pencilColor;
     if (randomizing && erasing) {
         toggleEraser();
@@ -173,7 +169,7 @@ function toggleRandomColors() {
 
 function toggleDarkening() {
     darkening = !darkening;
-    addOpacity.classList.toggle("filter-active");
+    darkening ? addOpacity.classList.add("filter-active") : addOpacity.classList.remove("filter-active");
     pencilColor = !darkening ? colorPicker.value : pencilColor;
     if (darkening && erasing) {
         toggleEraser();
@@ -183,7 +179,7 @@ function toggleDarkening() {
 // Clear Drawing
 function clearDrawing() {
     removeGrid();
-    createGrid();
+    setGridSize();
 }
 
 // Show Modal
@@ -197,7 +193,7 @@ function hideModal() {
 }
 
 // Event Listeners
-window.addEventListener("load", () => {createGrid()});
+window.addEventListener("load", () => {setGridSize()});
 clear.addEventListener("click", () => {clearDrawing()});
 pencil.addEventListener("click", () => {toggleSketching()});
 eraser.addEventListener("click", () => {toggleEraser()});
@@ -215,7 +211,7 @@ window.addEventListener("click", (event) => {
 saveBtn.addEventListener("click", () => {
     removeGrid();
     hideModal();
-    createGrid();
+    setGridSize();
 });
 
 cancelBtn.addEventListener("click", () => {
