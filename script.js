@@ -60,41 +60,47 @@ function createSquare(squareWidth, squareHeight) {
 
     canvas.appendChild(square);
 
-    //square.addEventListener("mousedown", (e) => paintSquare(e));
-    //square.addEventListener("mouseover", (e) => paintSquare(e));
-    //square.addEventListener("mouseup", (e) => paintSquare(e));
+    square.addEventListener("mousedown", (e) => setSquareBackground(e));
+    square.addEventListener("mouseover", (e) => setSquareBackground(e));
+    square.addEventListener("mouseup", (e) => setSquareBackground(e));
+
+    square.addEventListener("dragstart", (e) => e.preventDefault());
 }
 
-// Set Square Background Color
-function paintSquare(e) {
+// Set Square Background
+function setSquareBackground(e) {
     if (e.type === "mousedown") {
         sketch = true;
-        e.target.style.background = pencilColor;
-        getSquareBackground(e.target);
+        paintOrErase(e.target);
     } else if (e.type === "mouseover" && sketch) {
-        e.target.style.background = pencilColor;
-        getSquareBackground(e.target);
+        paintOrErase(e.target);
     } else {
         sketch = false;
     }
 }
 
-//Get Background Color
-function getSquareBackground(sq) {
-    if (sketching && monocoloring) {
-        pencilColor = getSingleColor();
-    } else if (sketching && randomizing) {
-        pencilColor = getRandomColors();
-    } else if (sketching && darkening) {
-        if (monocoloring) {
-            pencilColor = getSingleColor();
-            createDarkening();
-        } else if (randomizing) {
-            pencilColor = getRandomColors();
-            createDarkening(sq);
-        }
+//  Paint or Erase
+function paintOrErase(square) {
+    if (sketching) {
+        getSquareBackground(square);
+    } else if (erasing) {
+        eraseColor(square); 
     }
 }
+
+// Get Background Color
+function getSquareBackground(square) {
+    if (monocoloring && !randomizing && !darkening) {
+        square.style.opacity = 1;
+        setSingleColor(square);
+    } else if (randomizing && !monocoloring && !darkening) {
+        square.style.opacity = 1;
+        setRandomColors(square); 
+    } else if (darkening || darkening && monocoloring || darkening && randomizing) {
+        setDarkeningEffect(square);
+    }
+}
+
 // Drawing Styles
 
 // Set Single Color
@@ -119,11 +125,16 @@ function setDarkeningEffect(square) {
     } else if (randomizing) {
         transparentBg = setRandomColors(square);
     }
-    let opacity = Number(transparentBg.style.opacity);
+    let opacity = Number(square.style.opacity);
     if (opacity < 1) {
         opacity += 0.1;
         square.style.opacity = opacity;
     }
+}
+
+// Erase Paint
+function eraseColor(square) {
+    square.style.background = "";
 }
 
 // Toggle Buttons
@@ -133,18 +144,13 @@ function toggleSketching() {
     if (sketching && erasing) {
         toggleEraser();
     }
-    //if (sketching && monocoloring) {toggleSinigleColor()}
-    //if (sketching && randomizing) {toggleRandomColors()}
-    //if (sketching && darkening) {toggleDarkening()}
-    //if (sketching && erasing) {toggleEraser()}
 }
 
 function toggleEraser() {
     erasing = !erasing;
     erasing ? eraser.classList.add("btn-active") : eraser.classList.remove("btn-active");
-    pencilColor = erasing ? "" : colorPicker.value;
-    if (erasing && sketching) {
-        toggleSketching();
+    if (erasing) {
+        if (sketching) {toggleSketching()}
     }
 }
 
@@ -152,25 +158,22 @@ function toggleEraser() {
 function toggleSinigleColor() {
     monocoloring = !monocoloring;
     monocoloring ? monoColor.classList.add("filter-active") : monoColor.classList.remove("filter-active");
-    pencilColor = !monocoloring ? colorPicker.value : pencilColor;
-    if (monocoloring && erasing) {
-        toggleEraser();
+    if (monocoloring && randomizing) {
+        toggleRandomColors();
     }
 }
 
 function toggleRandomColors() {
     randomizing = !randomizing;
     randomizing ? randomColors.classList.add("filter-active") : randomColors.classList.remove("filter-active");
-    pencilColor = !randomizing ? colorPicker.value : pencilColor;
-    if (randomizing && erasing) {
-        toggleEraser();
+    if (randomizing && monocoloring) {
+        toggleSinigleColor();
     }
 }
 
 function toggleDarkening() {
     darkening = !darkening;
     darkening ? addOpacity.classList.add("filter-active") : addOpacity.classList.remove("filter-active");
-    pencilColor = !darkening ? colorPicker.value : pencilColor;
     if (darkening && erasing) {
         toggleEraser();
     }
