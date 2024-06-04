@@ -125,6 +125,7 @@ function setDarkeningEffect(square) {
     } else if (randomizing) {
         transparentBg = setRandomColors(square);
     }
+    //let opacity = 0;
     let opacity = Number(square.style.opacity);
     if (opacity < 1) {
         opacity += 0.1;
@@ -134,6 +135,9 @@ function setDarkeningEffect(square) {
 
 // Erase Paint
 function eraseColor(square) {
+    if (darkening) {
+        square.style.opacity = 0;
+    }
     square.style.background = "";
 }
 
